@@ -3,28 +3,20 @@ const router = express.Router();
 const connection = require('../../helpers/db');
 
 router.post('/signup', function(req, res, next) {
-
-        const userData = req.body;
+        
+        // let userData = req.body;
+        const {passwordbis,flash, ...userData} = req.body;
         connection.query('INSERT INTO users SET ?', userData, (err, results) => {
             if (err) {
                 return res.status(500).json({
-                  error: err.message,
+                  flash: err.message,
                   sql: err.sql,
                 });
               }
-              return connection.query('SELECT * FROM users WHERE id = ?', results.insertId, (err2, records) => {
-                if (err2) {
-                  return res.status(500).json({
-                    error: err2.message,
-                    sql: err2.sql,
-                  });
-                }
-                const insertedUser = records[0];
                 return res
                   .status(201)
-                  .json(insertedUser);
-                  
+                  .json({ flash:  `User has been signed up !` });
               });
             });
-        }); 
+     
 module.exports = router;
