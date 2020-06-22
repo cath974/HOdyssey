@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { TextField, Button, SnackbarContent } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { Link,useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,6 +23,8 @@ const useStyles = makeStyles((theme) => ({
 const SignUp = () => {
 
     const classes = useStyles();
+
+    const history = useHistory();
    
     const [ signUP, setSignUp ] = useState({
     email: '',
@@ -53,7 +56,7 @@ const SignUp = () => {
                 res  =>  setSignUp({...signUP, flash: res.flash }),
                 err  =>  setSignUp({...signUP, flash: err.flash })
             )
-            console.log (signUP)
+            history.push({pathname: '/'})
   }
 
 
@@ -68,6 +71,7 @@ const SignUp = () => {
                 <TextField id="standard-basic"  label="LastName" type="text" name="lastname" required value={signUP.lastname} onChange={updateField}/>
                 <Button variant="contained" color="primary" type="submit" name="submit">Submit</Button>
                 </form>
+                <Link className="" to="/signin">Sign In</Link>
                <div> 
                    {signUP.flash &&  <SnackbarContent message={signUP.flash} />}
                </div>
