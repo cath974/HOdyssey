@@ -22,7 +22,7 @@ passport.use('local', new LocalStrategy({
   } , function (email, password, done){
         
         connection.query('select * from users where email = ?', [email], function(err, result){
-            console.log(err); console.log(result);
+            // console.log(err); console.log(result);
           if (err) return done(err);
           if(!result.length){ 
               return done(null, false, {message: 'Invalid email'})

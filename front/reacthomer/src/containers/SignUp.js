@@ -56,7 +56,7 @@ const SignUp = () => {
                 res  =>  setSignUp({...signUP, flash: res.flash }),
                 err  =>  setSignUp({...signUP, flash: err.flash })
             )
-             //(flash===) && history.push({pathname: '/'})
+             //(flash==='') && history.push({pathname: '/'})
   }
 
 

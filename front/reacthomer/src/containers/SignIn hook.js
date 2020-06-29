@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { TextField, Button, SnackbarContent } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link,  useHistory }  from 'react-router-dom'; 
+import { connect } from  'react-redux';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -19,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
 
   },
 }));
+
 
 const SignIn = () => {
 
@@ -40,20 +42,34 @@ const SignIn = () => {
 
   const handleSubmit = (event) => {
       event.preventDefault();
-            //     fetch("/auth/signin",
-            // {
-            //     method:  'POST',
-            //     headers:  new  Headers({
-            //         'Content-Type':  'application/json'
-            //     }),
-            //     body:  JSON.stringify(signIN),
-            // })
-            // .then(res  =>  res.json())
-            // .then(
-            //     res  =>  setSignIN({...signIN, flash: res.flash }),
-            //     err  =>  setSignIN({...signIN, flash: err.flash })
-            // )
-            history.push({pathname: '/profile'})
+     
+        fetch("/auth/signin",
+            {
+                method:  'POST',
+                headers:  new  Headers({
+                    'Content-Type':  'application/json'
+                }),
+                body:  JSON.stringify(signIN),
+            })
+        .then((res) => res.json())
+        
+        .then (res => {
+            console.log(res)
+            this.props.dispatch(
+                {
+                    type : "CREATE_SESSION",
+                    user: res.user,
+                    token : res.token,
+                    message : res.message
+                })
+                setSignIN({...signIN, flash: res.token })                  
+        }
+         ) 
+          
+
+        .catch(err  => setSignIN({...signIN, flash: err.flash }))
+        
+            // history.push({pathname: '/profile'})
             console.log (signIN)
   }
 
@@ -76,5 +92,10 @@ const SignIn = () => {
     )
 }
 
-export default SignIn;
+const mapStateToProps = (state) => {
+    return {
+      flash: state.auth.token,
+    };
+  };
+  export default connect(mapStateToProps)(SignIn);
 

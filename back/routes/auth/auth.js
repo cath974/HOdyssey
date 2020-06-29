@@ -33,11 +33,16 @@ router.post('/signup', function(req, res, next) {
  
     router.post('/signin', function(req, res, next) {
           passport.authenticate('local',(err, user, info) => { 
-            if(err) return res.status(500).send(err) 
-            if (!user) return res.status(400).json({message: info.message});  
+            if (err) {
+              return res.status(500).json({
+                flash: err.message,
+                sql: err.sql,
+              });
+            }
+            if (!user) return res.status(400).json({flash: info.message});  
             // return res.json({user}); 
             const token = jwt.sign(JSON.stringify(user), 'coucou');  
-            return res.json({user, token}); 
+            return res.json({user, token, flash:  `User sign in!` }); 
         })(req, res);
       })
    
